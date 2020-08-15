@@ -18,7 +18,7 @@ def accept_connection():
     while True:
         client, client_address = SERVER.accept()
         print(f"{client_address} has joined")
-        client.send(bytes("Hello fellow traveler! Pls enter your name"), "utf8")
+        client.send(bytes("Hello fellow traveler!Pls enter your name", "utf8"))
         addresses.append(client_address)
         Thread(target=process_client, args=(client,)).start()
 
@@ -29,7 +29,7 @@ def process_client(client):
     welcome = f"Welcome {name}! if you want to quit type (QUIT)"
     client.send(bytes(welcome, "utf8"))
     msg = f"{name} has joined the chat"
-    broadcast(bytes(msg,"utf8"))
+    broadcast(bytes(msg, "utf8"))
     clients.append(client)  # maybe need to save name as well
 
     while True:
