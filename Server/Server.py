@@ -9,9 +9,9 @@ addresses = []
 HOST = ''
 PORT = 33000
 BUFSIZE = 1024
-ADDR = (HOST, PORT)
+ADDRESS = (HOST, PORT)
 SERVER = socket(AF_INET, SOCK_STREAM)
-SERVER.bind(ADDR)
+SERVER.bind(ADDRESS)
 
 
 def accept_connection():
@@ -41,6 +41,7 @@ def process_client(client):
             client.close()
             clients.remove(client)
             broadcast(bytes(f"{name} left the chat", "utf8"))
+            print(f"{name} left the chat")
             break
 
 
@@ -51,7 +52,7 @@ def broadcast(msg, prefix=""):
 
 if __name__ == "__main__":
     SERVER.listen(5)
-    print("waiting for connections")
+    print("Server started! Waiting for connections")
     ACCEPT_THREAD = Thread(target=accept_connection())
     ACCEPT_THREAD.start()
     ACCEPT_THREAD.join()
