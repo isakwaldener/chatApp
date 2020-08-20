@@ -5,33 +5,60 @@ class GUI:
 
     msg_frame = None
     enter_server_frame = None
+    root = tkinter.Tk()
+    host_entry = None
+    port_entry = None
+    port = None
+    host = None
+
 
     def __init__(self, client):
         self.client = client
-        self.root = tkinter.Tk()
-        self.root.title("This is a chat")
-        self.enter_server()
+        self.init_root()
+        self.enter_server_frame()
 
     def start_mainloop(self):
         self.root.mainloop()
+
+    def init_root(self):
+        self.root.title("This is a chat")
+        self.root.protocol("WM_DELETE_WINDOW", self.client.on_close)
     
     def root_quit(self):
         self.root.destroy()
 
-    def enter_server(self):
+    def enter_server_entry_field(self):
+        entry = tkinter.Entry(self.enter_server_frame)
+        entry.pack()
+        return entry
+
+    def entry_field_msg_frame(self):
+        entry = tkinter.Entry(self.msg_frame)
+        entry.pack()
+        return entry
+    
+    def enter_server_label(self, message):
+        label = tkinter.Label(self.enter_server_frame, text=message)
+        label.pack()
+        return label
+
+    def enter_server_button(self):
+        button = tkinter.Button(self.enter_server_frame, text="Join server",
+                                command=self.join_server)
+        button.pack()
+        return button
+
+    def set_port_and_host(self):
+        self.port = self.port_entry.get()
+        self.host = self.host_entry.get()
+        
+    def enter_server_frame(self):
         self.enter_server_frame = tkinter.Frame(self.root)
-        enter_label = tkinter.Label(self.enter_server_frame, text="Enter host")
-        enter_label.pack()
-        e = tkinter.Entry(self.enter_server_frame)
-        e.pack()
-        port_label = tkinter.Label(self.enter_server_frame, text="Enter port")
-        port_label.pack()
-        e2 = tkinter.Entry(self.enter_server_frame)
-        e2.pack()
-        enter_button = tkinter.Button(self.enter_server_frame, text="confirm host",
-                              command=lambda: self.join_server(e.get(),
-                              e2.get()))
-        enter_button.pack()
+        host_label = self.enter_server_label("Enter host")
+        self.host_entry = self.enter_server_entry_field()
+        port_label = self.enter_server_label("Enter port")
+        self.port_entry = self.enter_server_entry_field()
+        enter_button = self.enter_server_button()
         self.enter_server_frame.pack()
 
     def destroy_msg_frame(self):
@@ -40,7 +67,10 @@ class GUI:
     def destroy_enter_server_frame(self):
         self.enter_server_frame.destroy()
 
-    def message_window(self):
+    def initialize_frame(self, frame):
+        frame = tkinter.Frame(self.root)
+    
+    def message_window_frame(self):
 
         self.msg_frame = tkinter.Frame(self.root)
         self.client.message = tkinter.StringVar()
@@ -61,10 +91,11 @@ class GUI:
                                      command=self.client.send)
         send_button.pack()
 
-    def join_server(self, host, port):
+    def join_server(self):
+        self.set_port_and_host()
         self.destroy_enter_server_frame()
-        self.message_window()
-        self.client.setADDR(host, port)
+        self.message_window_frame()
+        self.client.setADDR(self.host, self.port)
         self.client.set_socket()
         self.client.create_thread()
         
