@@ -1,21 +1,16 @@
 import tkinter
-
+from Enter_server import Enter_server
 
 class GUI:
 
     msg_frame = None
-    enter_server_frame = None
     root = tkinter.Tk()
-    host_entry = None
-    port_entry = None
-    port = None
-    host = None
 
 
     def __init__(self, client):
         self.client = client
         self.init_root()
-        self.enter_server_frame()
+        self.enter_server = Enter_server(self, client)
 
     def start_mainloop(self):
         self.root.mainloop()
@@ -27,46 +22,14 @@ class GUI:
     def root_quit(self):
         self.root.destroy()
 
-    def enter_server_entry_field(self):
-        entry = tkinter.Entry(self.enter_server_frame)
-        entry.pack()
-        return entry
-
     def entry_field_msg_frame(self):
         entry = tkinter.Entry(self.msg_frame)
         entry.pack()
         return entry
     
-    def enter_server_label(self, message):
-        label = tkinter.Label(self.enter_server_frame, text=message)
-        label.pack()
-        return label
-
-    def enter_server_button(self):
-        button = tkinter.Button(self.enter_server_frame, text="Join server",
-                                command=self.join_server)
-        button.pack()
-        return button
-
-    def set_port_and_host(self):
-        self.port = self.port_entry.get()
-        self.host = self.host_entry.get()
-        
-    def enter_server_frame(self):
-        self.enter_server_frame = tkinter.Frame(self.root)
-        host_label = self.enter_server_label("Enter host")
-        self.host_entry = self.enter_server_entry_field()
-        port_label = self.enter_server_label("Enter port")
-        self.port_entry = self.enter_server_entry_field()
-        enter_button = self.enter_server_button()
-        self.enter_server_frame.pack()
-
     def destroy_msg_frame(self):
         self.msg_frame.destroy()
     
-    def destroy_enter_server_frame(self):
-        self.enter_server_frame.destroy()
-
     def initialize_frame(self, frame):
         frame = tkinter.Frame(self.root)
     
@@ -91,11 +54,10 @@ class GUI:
                                      command=self.client.send)
         send_button.pack()
 
-    def join_server(self):
-        self.set_port_and_host()
-        self.destroy_enter_server_frame()
+    def join_server(self, host, port):
+        self.enter_server.destroy_enter_server_frame()
         self.message_window_frame()
-        self.client.setADDR(self.host, self.port)
+        self.client.setADDR(host, port)
         self.client.set_socket()
         self.client.create_thread()
         
