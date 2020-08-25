@@ -4,20 +4,19 @@ from message import message_frame
 
 class GUI:
 
-    root = tkinter.Tk()
-
-
     def __init__(self, client):
         self.client = client
-        self.init_root()
+        self.root = self.init_root() 
         self.enter_server = Enter_server(self, client)
 
     def start_mainloop(self):
         self.root.mainloop()
 
     def init_root(self):
-        self.root.title("This is a chat")
-        self.root.protocol("WM_DELETE_WINDOW", self.client.on_close)
+        root = tkinter.Tk()
+        root.title("This is a chat")
+        root.protocol("WM_DELETE_WINDOW", self.client.on_close)
+        return root
     
     def root_quit(self):
         self.root.destroy()
