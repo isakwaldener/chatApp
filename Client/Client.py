@@ -10,10 +10,10 @@ class Client:
 
     def __init__(self):
         self.ADDR = None
-        self.message = tkinter.StringVar()
         self.msg_list = None
         self.socket = None
         self.gui = GUI(self)
+        self.message = tkinter.StringVar()
 
     def init_message_list(self, listbox):
         self.msg_list = listbox
