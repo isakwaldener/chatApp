@@ -67,7 +67,7 @@ def get_room(room_number):
 def create_room_and_return_it(room_number):
     while room_number >= len(rooms):
         rooms.append([])
-        if len(rooms) = 50:
+        if len(rooms) == 50:
             break
     return rooms[-1]
 
